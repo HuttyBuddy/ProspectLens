@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "ProspectLens - B2B Prospecting Copilot",
+  "version": "1.0.0",
+  "description": "Audit local business websites, generate client PDF audits, and sync leads with custom video ad hooks to GoHighLevel & Zapier.",
+  "permissions": [
+    "sidePanel",
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "service_worker": "background/serviceWorker.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://extensionpay.com/*"],
+      "js": ["ExtPay.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["features/extractor/contentScript.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "Open ProspectLens"
+  },
+  "side_panel": {
+    "default_path": "src/sidepanel/index.html"
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}

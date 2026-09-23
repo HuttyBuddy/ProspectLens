@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProspectLens — AI Website Growth Auditor &amp; B2B Outreach Copilot</title>
+  <meta name="description" content="Turn any business website into executive growth audit PDFs, tailored B2B outreach pitches, and direct CRM sync right from your browser side panel.">
+  <meta name="keywords" content="Chrome Extension, Lead Generation, B2B Sales, Cold Outreach, Website Audit, Growth Audit PDF, GoHighLevel CRM, Prospecting Copilot">
+  
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://huttybuddy.github.io/ProspectLens/">
+  <meta property="og:title" content="ProspectLens — High-Velocity B2B Prospecting &amp; Growth Audit Copilot">
+  <meta property="og:description" content="Generate client-ready growth audit PDFs, tailored pitch copy, and sync leads to your CRM in seconds directly in Chrome.">
+  <meta property="og:image" content="assets/marquee-banner-1400x560.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/icon-16.png">
+  <link rel="apple-touch-icon" sizes="128x128" href="assets/icon-128.png">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            },
+            cyanAccent: {
+              400: '#38bdf8',
+              500: '#06b6d4',
+            },
+            emeraldAccent: {
+              400: '#34d399',
+              500: '#10b981',
+            },
+            slateDark: {
+              800: '#1e293b',
+              850: '#151f32',
+              900: '#0f172a',
+              950: '#020617',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #020617;
+      color: #f8fafc;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+    }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.5);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(51, 65, 85, 0.4);
+      transition: all 0.25s ease-in-out;
+    }
+    .glass-card:hover {
+      background: rgba(30, 41, 59, 0.75);
+      border-color: rgba(56, 189, 248, 0.4);
+      transform: translateY(-2px);
+    }
+    .glow-cyan {
+      box-shadow: 0 0 35px -5px rgba(56, 189, 248, 0.25);
+    }
+    .glow-blue {
+      box-shadow: 0 0 40px -5px rgba(37, 99, 235, 0.3);
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 50%, #60a5fa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gradient-border {
+      position: relative;
+    }
+    .gradient-border::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.5), rgba(37, 99, 235, 0.2), transparent);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slateDark-950 text-slate-100 antialiased selection:bg-brand-600 selection:text-white">
+
+  <!-- Ambient Background Lighting -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+    <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-brand-600/15 rounded-full blur-[140px]"></div>
+    <div class="absolute top-[35%] -left-32 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px]"></div>
+    <div class="absolute top-[65%] -right-32 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[160px]"></div>
+  </div>
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <!-- Logo & Branding -->
+      <a href="#" class="flex items-center space-x-3 group">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-600 to-cyan-500 p-0.5 shadow-lg shadow-brand-600/30 group-hover:scale-105 transition-transform">
+          <img src="assets/icon-128.png" alt="ProspectLens Logo" class="w-full h-full object-contain rounded-[10px] bg-slateDark-950">
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center space-x-2">
+            <span class="font-bold text-xl tracking-tight text-white group-hover:text-cyanAccent-400 transition-colors">ProspectLens</span>
+            <span class="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider bg-brand-600/20 text-cyanAccent-400 border border-brand-500/30 rounded-full">v1.0</span>
+          </div>
+          <span class="text-xs text-slate-400 hidden sm:inline">B2B Prospecting &amp; Growth Audit Copilot</span>
+        </div>
+      </a>
+
+      <!-- Desktop Links -->
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+        <a href="#features" class="hover:text-cyanAccent-400 transition-colors">Features</a>
+        <a href="#deliverables" class="hover:text-cyanAccent-400 transition-colors">Growth Audit PDF</a>
+        <a href="#demo-video" class="hover:text-cyanAccent-400 transition-colors">Demo Video</a>
+        <a href="#gallery" class="hover:text-cyanAccent-400 transition-colors">Screenshots</a>
+        <a href="#pricing" class="hover:text-cyanAccent-400 transition-colors">Pricing</a>
+        <a href="privacy.html" class="hover:text-cyanAccent-400 transition-colors">Privacy</a>
+      </nav>
+
+      <!-- Action Button -->
+      <div class="flex items-center space-x-3">
+        <a href="https://github.com/HuttyBuddy/ProspectLens" target="_blank" rel="noopener noreferrer" class="p-2 text-slate-400 hover:text-white transition-colors" title="GitHub Repository">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+        <a href="#install" class="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-cyan-600 hover:from-brand-500 hover:to-cyan-500 text-white font-semibold text-sm shadow-lg shadow-brand-600/30 transition-all hover:scale-[1.02]">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.383 0 0 5.383 0 12s5.383 12 12 12 12-5.383 12-12S18.617 0 12 0zm0 4.8a7.2 7.2 0 110 14.4 7.2 7.2 0 010-14.4zm0 2.4a4.8 4.8 0 100 9.6 4.8 4.8 0 000-9.6zm0 2.4a2.4 2.4 0 110 4.8 2.4 2.4 0 010-4.8z"/></svg>
+          <span>Add to Chrome</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative pt-16 pb-24 md:pt-24 md:pb-32 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      
+      <!-- Announcement Pill -->
+      <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-slate-900 border border-slate-700/80 text-xs sm:text-sm text-slate-300 mb-8 shadow-inner hover:border-cyanAccent-400/50 transition-all cursor-default">
+        <span class="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="font-medium text-slate-200">Chrome Web Store Ready</span>
+        <span class="text-slate-500">•</span>
+        <span class="text-cyanAccent-400 font-semibold">100% Client-Side Private DOM Copilot</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight text-white max-w-5xl mx-auto leading-[1.12]">
+        Turn Any Business Website Into High-Converting 
+        <span class="gradient-text">Outreach &amp; Growth Audits</span> in Seconds.
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="mt-6 text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed">
+        Stop spending 45 minutes researching each prospect. ProspectLens lives right in your browser side panel, scanning landing pages for revenue leaks, generating executive client growth PDFs, and queuing cold email pitches with 1-click CRM synchronization.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#install" class="w-full sm:w-auto inline-flex items-center justify-center space-x-3 px-8 py-4 rounded-xl bg-gradient-to-r from-brand-600 via-blue-600 to-cyan-500 hover:from-brand-500 hover:to-cyan-400 text-white font-bold text-base shadow-xl shadow-brand-600/30 transition-all transform hover:-translate-y-0.5">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
+          <span>Get ProspectLens Free</span>
+        </a>
+        <a href="#deliverables" class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-7 py-4 rounded-xl glass-card text-slate-200 hover:text-white font-semibold text-base transition-all hover:bg-slate-800/80">
+          <svg class="w-5 h-5 text-cyanAccent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <span>See Sample PDF Audit</span>
+        </a>
+      </div>
+
+      <!-- Trust Badges Bar -->
+      <div class="mt-12 flex flex-wrap items-center justify-center gap-y-3 gap-x-8 text-xs sm:text-sm text-slate-400">
+        <div class="flex items-center space-x-2">
+          <svg class="w-4 h-4 text-emeraldAccent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          <span>No Credit Card Required</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <svg class="w-4 h-4 text-emeraldAccent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          <span>Local Storage Only (Zero Data Sale)</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <svg class="w-4 h-4 text-emeraldAccent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          <span>GoHighLevel &amp; Excel CSV Compatible</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <svg class="w-4 h-4 text-emeraldAccent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          <span>Compliant (Restricted Niches Protected)</span>
+        </div>
+      </div>
+
+      <!-- Hero Visual Showcase -->
+      <div class="mt-14 max-w-5xl mx-auto relative rounded-2xl p-2 bg-gradient-to-b from-slate-700/50 via-slate-800/20 to-slate-900/80 border border-slate-700/60 shadow-2xl glow-blue">
+        <div class="rounded-xl overflow-hidden bg-slate-950">
+          <img src="assets/marquee-banner-1400x560.jpg" alt="ProspectLens Extension Showcase" class="w-full h-auto object-cover transform hover:scale-[1.01] transition-transform duration-500">
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Metric / Key Highlights Strip -->
+  <section class="border-y border-slate-800/80 bg-slateDark-900/50 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div>
+          <div class="text-3xl sm:text-4xl font-extrabold text-cyanAccent-400">10 Sec</div>
+          <div class="mt-1 text-sm font-medium text-slate-400">Average Audit Generation</div>
+        </div>
+        <div>
+          <div class="text-3xl sm:text-4xl font-extrabold text-white">4 Modes</div>
+          <div class="mt-1 text-sm font-medium text-slate-400">Tailored Pitch Strategies</div>
+        </div>
+        <div>
+          <div class="text-3xl sm:text-4xl font-extrabold text-emeraldAccent-400">100%</div>
+          <div class="mt-1 text-sm font-medium text-slate-400">Client-Side Privacy</div>
+        </div>
+        <div>
+          <div class="text-3xl sm:text-4xl font-extrabold text-brand-400">1-Click</div>
+          <div class="mt-1 text-sm font-medium text-slate-400">CRM Dispatch &amp; CSV Export</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comprehensive Feature Grid -->
+  <section id="features" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-xs font-bold uppercase tracking-widest text-cyanAccent-400 mb-3">Enterprise-Grade Architecture</h2>
+      <p class="text-3xl sm:text-4xl font-extrabold text-white">Everything Agency Founders &amp; Sales Closers Need</p>
+      <p class="mt-4 text-base text-slate-400">Engineered specifically to solve the friction of prospecting, outbound personalization, and trust-building on first touch.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      <!-- Card 1 -->
+      <div class="glass-card p-8 rounded-2xl flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 rounded-xl bg-brand-600/20 border border-brand-500/30 flex items-center justify-center text-cyanAccent-400 mb-6">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Automated Opportunity Radar</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Instantly analyzes conversion bottlenecks on the visited business site: hero clarity, CTA existence, social proof proofpoints, responsive layout tags, and schema metadata.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-800 flex items-center text-xs text-slate-400 font-medium">
+          <span class="text-cyanAccent-400 mr-2">✓</span> Zero manual inspection needed
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="glass-card p-8 rounded-2xl flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 rounded-xl bg-cyan-600/20 border border-cyan-500/30 flex items-center justify-center text-cyanAccent-400 mb-6">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">1-Click Client Growth Audit PDF</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Generate an executive-ready, beautifully designed client growth audit PDF complete with letter grade score, detected gaps, and an actionable 3-phase strategic roadmap.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-800 flex items-center text-xs text-slate-400 font-medium">
+          <span class="text-cyanAccent-400 mr-2">✓</span> Client-facing branded deliverable
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="glass-card p-8 rounded-2xl flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 rounded-xl bg-emerald-600/20 border border-emerald-500/30 flex items-center justify-center text-emeraldAccent-400 mb-6">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Multi-Angle Outreach Generator</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Generate personalized cold emails, LinkedIn connection notes, SMS follow-ups, and value-first pitches in 4 distinct persuasion angles: Pain-First, Value-Stack, Quick Audit, and Casual.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-800 flex items-center text-xs text-slate-400 font-medium">
+          <span class="text-cyanAccent-400 mr-2">✓</span> 1-click clipboard copy
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="glass-card p-8 rounded-2xl flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-brand-400 mb-6">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">GoHighLevel &amp; CRM Sync</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Send captured prospects, company phone numbers, email contacts, and audit summaries directly to GoHighLevel or any webhook endpoint (Zapier, Make, n8n) with a single tap.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-800 flex items-center text-xs text-slate-400 font-medium">
+          <span class="text-cyanAccent-400 mr-2">✓</span> Standardized JSON payloads
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="glass-card p-8 rounded-2xl flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 rounded-xl bg-cyan-600/20 border border-cyan-500/30 flex items-center justify-center text-cyanAccent-400 mb-6">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">RFC-4180 Bulk CSV Exporter</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Export your saved prospect pipeline into clean, standardized CSV with UTF-8 BOM encoding for seamless opening in Microsoft Excel, Google Sheets, or cold outreach email sequencers.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-800 flex items-center text-xs text-slate-400 font-medium">
+          <span class="text-cyanAccent-400 mr-2">✓</span> Instant spreadsheet readiness
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="glass-card p-8 rounded-2xl flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 rounded-xl bg-slate-700/30 border border-slate-600/40 flex items-center justify-center text-emeraldAccent-400 mb-6">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Strict Legal &amp; Niche Compliance</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Built-in regulatory protection automatically flags and excludes restricted professional categories (law firms and real estate brokers) from aggressive extraction and outreach campaigns.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-800 flex items-center text-xs text-slate-400 font-medium">
+          <span class="text-cyanAccent-400 mr-2">✓</span> Zero risk of policy violations
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Deliverables Spotlight: Growth Audit PDF -->
+  <section id="deliverables" class="py-20 bg-slateDark-900/60 border-y border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <div class="lg:col-span-5 space-y-6">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-md bg-brand-600/20 border border-brand-500/30 text-xs font-bold uppercase tracking-wider text-cyanAccent-400">
+            High-Value Lead Magnet
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight">
+            Hand Prospects an Irresistible Executive Audit PDF
+          </h2>
+          <p class="text-slate-300 text-base leading-relaxed">
+            Cold pitching with generic templates yields 1% reply rates. Handing business owners a diagnostic report pinpointing exactly where they are losing leads converts at 15–30%.
+          </p>
+          <ul class="space-y-4 text-sm text-slate-300">
+            <li class="flex items-start">
+              <div class="p-1 rounded bg-brand-600/30 text-cyanAccent-400 mr-3 mt-0.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <div>
+                <strong class="text-white font-semibold">Executive Health Scorecard:</strong> Clear visual letter grade (A+ through F) measuring digital conversion efficiency.
+              </div>
+            </li>
+            <li class="flex items-start">
+              <div class="p-1 rounded bg-brand-600/30 text-cyanAccent-400 mr-3 mt-0.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <div>
+                <strong class="text-white font-semibold">Categorized Deficit Analysis:</strong> Highlights missing mobile click-to-call, deficient social proof, slow load times, and missing SEO tags.
+              </div>
+            </li>
+            <li class="flex items-start">
+              <div class="p-1 rounded bg-brand-600/30 text-cyanAccent-400 mr-3 mt-0.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <div>
+                <strong class="text-white font-semibold">Strategic Implementation Plan:</strong> Provides a 30-day tactical roadmap that naturally positions your agency's services as the solution.
+              </div>
+            </li>
+          </ul>
+
+          <div class="pt-2">
+            <a href="assets/screenshot-2-audit-pdf-1280x800.jpg" target="_blank" class="inline-flex items-center space-x-2 text-sm font-semibold text-cyanAccent-400 hover:text-cyan-300 transition-colors">
+              <span>View high-resolution audit preview</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7">
+          <div class="rounded-2xl p-2 bg-gradient-to-br from-slate-700/60 to-slate-900/90 border border-slate-700/70 shadow-2xl glow-cyan">
+            <img src="assets/screenshot-2-audit-pdf-1280x800.jpg" alt="ProspectLens Executive PDF Growth Audit" class="w-full h-auto rounded-xl shadow-inner">
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Video Walkthrough Demonstration -->
+  <section id="demo-video" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <h2 class="text-xs font-bold uppercase tracking-widest text-cyanAccent-400 mb-3">See It In Action</h2>
+      <p class="text-3xl sm:text-4xl font-extrabold text-white">Full Extension Feature Walkthrough</p>
+      <p class="mt-4 text-slate-400 text-base">Watch how ProspectLens evaluates live domains, crafts high-converting copy, and exports full prospect dossiers in under 30 seconds.</p>
+    </div>
+
+    <div class="max-w-4xl mx-auto rounded-2xl p-2 bg-gradient-to-b from-brand-600/40 via-slate-800/50 to-slate-950 border border-brand-500/40 shadow-2xl glow-blue">
+      <div class="rounded-xl overflow-hidden bg-slate-950 relative aspect-video">
+        <video controls poster="assets/promo-tile-small-440x280.jpg" class="w-full h-full object-cover">
+          <source src="assets/prospectlens-promo-video.mp4" type="video/mp4">
+          Your browser does not support HTML5 video.
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Screenshot Gallery -->
+  <section id="gallery" class="py-20 bg-slateDark-900/40 border-y border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <h2 class="text-xs font-bold uppercase tracking-widest text-cyanAccent-400 mb-3">Live Interface</h2>
+        <p class="text-3xl sm:text-4xl font-extrabold text-white">Designed for Speed and Focus</p>
+        <p class="mt-3 text-slate-400 text-sm sm:text-base">Toggle between core workflows to see how ProspectLens seamlessly integrates into your daily sales routine.</p>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mb-8" id="galleryTabs">
+        <button onclick="switchTab(0)" class="tab-btn px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm transition-all bg-brand-600 text-white shadow-lg shadow-brand-600/30">
+          1. Opportunity Radar
+        </button>
+        <button onclick="switchTab(1)" class="tab-btn px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm transition-all bg-slate-800/80 text-slate-400 hover:text-white">
+          2. Executive Audit PDF
+        </button>
+        <button onclick="switchTab(2)" class="tab-btn px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm transition-all bg-slate-800/80 text-slate-400 hover:text-white">
+          3. Multi-Channel Outreach
+        </button>
+        <button onclick="switchTab(3)" class="tab-btn px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm transition-all bg-slate-800/80 text-slate-400 hover:text-white">
+          4. CRM Sync &amp; CSV Export
+        </button>
+      </div>
+
+      <!-- Gallery Display Container -->
+      <div class="max-w-5xl mx-auto rounded-2xl p-2 bg-gradient-to-b from-slate-700/50 via-slate-800/20 to-slate-900/80 border border-slate-700/60 shadow-2xl">
+        <div class="rounded-xl overflow-hidden bg-slate-950">
+          <img id="galleryImg" src="assets/screenshot-1-overview-1280x800.jpg" alt="ProspectLens Screenshot" class="w-full h-auto transition-opacity duration-300">
+        </div>
+        <div id="galleryCaption" class="py-4 px-6 text-center text-sm font-medium text-slate-300">
+          1. Instant side panel evaluation: health score, key contacts, and detected revenue opportunities.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Single Purpose & Security Guarantee -->
+  <section class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-slate-700/80">
+      <div class="max-w-3xl mx-auto text-center space-y-6">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-xs font-bold uppercase tracking-wider text-emeraldAccent-400">
+          Chrome Web Store Compliance Guaranteed
+        </div>
+        <h2 class="text-3xl font-extrabold text-white">Our Single Purpose &amp; Privacy Pledge</h2>
+        <p class="text-slate-300 text-base leading-relaxed">
+          ProspectLens exists solely to assist sales professionals and digital agencies in analyzing public business web markup to produce outreach pitches and diagnostic growth reports.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4 text-left">
+          <div class="p-5 rounded-xl bg-slate-900/80 border border-slate-800">
+            <div class="text-cyanAccent-400 font-bold mb-1">Local-First Storage</div>
+            <p class="text-xs text-slate-400 leading-normal">Your saved leads, custom service offerings, and notes remain inside your browser's local sandbox.</p>
+          </div>
+          <div class="p-5 rounded-xl bg-slate-900/80 border border-slate-800">
+            <div class="text-cyanAccent-400 font-bold mb-1">On-Demand Only</div>
+            <p class="text-xs text-slate-400 leading-normal">Never runs background watchers or passive monitors. DOM inspection only fires when you explicitly click.</p>
+          </div>
+          <div class="p-5 rounded-xl bg-slate-900/80 border border-slate-800">
+            <div class="text-cyanAccent-400 font-bold mb-1">Zero Data Sale</div>
+            <p class="text-xs text-slate-400 leading-normal">We do not sell, trade, broker, or transmit user or prospect data to any data brokers or ad networks.</p>
+          </div>
+        </div>
+        <div class="pt-4">
+          <a href="privacy.html" class="inline-flex items-center space-x-2 text-sm font-semibold text-brand-400 hover:text-cyanAccent-400 transition-colors underline underline-offset-4">
+            <span>Read full Chrome Web Store Privacy Policy</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Tier Section -->
+  <section id="pricing" class="py-20 bg-slateDark-900/60 border-y border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs font-bold uppercase tracking-widest text-cyanAccent-400 mb-3">Transparent Plans</h2>
+        <p class="text-3xl sm:text-4xl font-extrabold text-white">Invest in More Booked Discovery Calls</p>
+        <p class="mt-4 text-slate-400 text-base">Select the tier that matches your agency or freelancing growth target.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
+        
+        <!-- Starter Plan -->
+        <div class="glass-card p-8 rounded-2xl flex flex-col justify-between">
+          <div>
+            <div class="text-lg font-bold text-white mb-1">Free Starter</div>
+            <p class="text-xs text-slate-400 mb-6">Perfect for testing live site audits and quick outreach copy.</p>
+            <div class="flex items-baseline mb-6">
+              <span class="text-4xl font-extrabold text-white">$0</span>
+              <span class="text-slate-400 text-sm ml-2">/ forever</span>
+            </div>
+            <ul class="space-y-3 text-sm text-slate-300">
+              <li class="flex items-center"><span class="text-cyanAccent-400 mr-2">✓</span> Up to 15 Domain Audits/mo</li>
+              <li class="flex items-center"><span class="text-cyanAccent-400 mr-2">✓</span> Standard Email Pitch Generator</li>
+              <li class="flex items-center"><span class="text-cyanAccent-400 mr-2">✓</span> Opportunity Scorecard</li>
+              <li class="flex items-center"><span class="text-cyanAccent-400 mr-2">✓</span> Chrome SidePanel Access</li>
+            </ul>
+          </div>
+          <div class="mt-8">
+            <a href="#install" class="block w-full text-center py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-sm transition-colors">
+              Install Free
+            </a>
+          </div>
+        </div>
+
+        <!-- Pro Plan (Featured) -->
+        <div class="relative glass-card p-8 rounded-2xl flex flex-col justify-between border-2 border-brand-500/70 shadow-2xl glow-blue">
+          <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-brand-600 to-cyan-500 text-white text-xs font-bold uppercase tracking-wider shadow-md">
+            Most Popular
+          </div>
+          <div>
+            <div class="text-lg font-bold text-white mb-1">Professional</div>
+            <p class="text-xs text-slate-400 mb-6">For active sales reps, outbound SDRs, and agency founders.</p>
+            <div class="flex items-baseline mb-6">
+              <span class="text-4xl font-extrabold text-white">$29</span>
+              <span class="text-slate-400 text-sm ml-2">/ month</span>
+            </div>
+            <ul class="space-y-3 text-sm text-slate-300">
+              <li class="flex items-center"><span class="text-cyanAccent-400 mr-2">✓</span> <strong>Unlimited</strong> Domain Audits</li>
+              <li class="flex items-center"><span class="text-cyanAccent-400 mr-2">✓</span> <strong>1-Click Growth Audit PDF</strong> Generator</li>
+              <li class="flex items-center"><span class="text-cyanAccent-400 mr-2">✓</span> All 4 Outbound Persuasion Frameworks</li>
+              <li class="flex items-center"><span class="text-cyanAccent-400 mr-2">✓</span> Paid Ad Creative Concept Writer</li>
+              <li class="flex items-center"><span class="text-cyanAccent-400 mr-2">✓</span> Bulk RFC-4180 CSV Pipeline Export</li>
+            </ul>
+          </div>
+          <div class="mt-8">
+            <a href="#install" class="block w-full text-center py-3 rounded-xl bg-gradient-to-r from-brand-600 to-cyan-500 hover:from-brand-500 hover:to-cyan-400 text-white font-bold text-sm shadow-lg shadow-brand-600/30 transition-all hover:scale-[1.02]">
+              Start 7-Day Free Trial
+            </a>
+          </div>
+        </div>
+
+        <!-- Agency Plan -->
+        <div class="glass-card p-8 rounded-2xl flex flex-col justify-between">
+          <div>
+            <div class="text-lg font-bold text-white mb-1">Agency Suite</div>
+            <p class="text-xs text-slate-400 mb-6">For scaling sales teams and automated CRM pipelines.</p>
+            <div class="flex items-baseline mb-6">
+              <span class="text-4xl font-extrabold text-white">$79</span>
+              <span class="text-slate-400 text-sm ml-2">/ month</span>
+            </div>
+            <ul class="space-y-3 text-sm text-slate-300">
+              <li class="flex items-center"><span class="text-cyanAccent-400 mr-2">✓</span> Everything in Professional</li>
+              <li class="flex items-center"><span class="text-cyanAccent-400 mr-2">✓</span> <strong>GoHighLevel</strong> Webhook Direct Dispatch</li>
+              <li class="flex items-center"><span class="text-cyanAccent-400 mr-2">✓</span> Custom Brand White-Label on PDF Audits</li>
+              <li class="flex items-center"><span class="text-cyanAccent-400 mr-2">✓</span> Multi-Seat Team License</li>
+              <li class="flex items-center"><span class="text-cyanAccent-400 mr-2">✓</span> Priority Dedicated Support</li>
+            </ul>
+          </div>
+          <div class="mt-8">
+            <a href="#install" class="block w-full text-center py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-sm transition-colors">
+              Get Agency Access
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Accordion -->
+  <section class="py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-xs font-bold uppercase tracking-widest text-cyanAccent-400 mb-3">Got Questions?</h2>
+      <p class="text-3xl font-extrabold text-white">Frequently Asked Questions</p>
+    </div>
+
+    <div class="space-y-4">
+      <details class="glass-card rounded-xl p-6 group cursor-pointer">
+        <summary class="font-bold text-base text-white flex justify-between items-center list-none">
+          <span>How does ProspectLens analyze a website?</span>
+          <span class="text-cyanAccent-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-4 text-slate-300 text-sm leading-relaxed">
+          When you open the side panel and click "Analyze", ProspectLens uses the standard Chrome Scripting API to read public HTML elements in the active tab. It inspects headings, telephone links, mailto addresses, social media links, structured Schema.org data, and CTA buttons completely client-side.
+        </p>
+      </details>
+
+      <details class="glass-card rounded-xl p-6 group cursor-pointer">
+        <summary class="font-bold text-base text-white flex justify-between items-center list-none">
+          <span>Does ProspectLens scrape LinkedIn or private social profiles?</span>
+          <span class="text-cyanAccent-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-4 text-slate-300 text-sm leading-relaxed">
+          No. ProspectLens strictly analyzes the public website you are actively visiting. It does not scrape LinkedIn, bypass logins, access private member profiles, or harvest unlisted contacts.
+        </p>
+      </details>
+
+      <details class="glass-card rounded-xl p-6 group cursor-pointer">
+        <summary class="font-bold text-base text-white flex justify-between items-center list-none">
+          <span>How does GoHighLevel CRM integration work?</span>
+          <span class="text-cyanAccent-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-4 text-slate-300 text-sm leading-relaxed">
+          You can paste your GoHighLevel Inbound Webhook URL into the ProspectLens Settings tab. When you click "Sync to CRM", ProspectLens sends an HTTP POST request with the company name, website, phone, email, health score, and tailored proposal angles directly into your GHL workflow.
+        </p>
+      </details>
+
+      <details class="glass-card rounded-xl p-6 group cursor-pointer">
+        <summary class="font-bold text-base text-white flex justify-between items-center list-none">
+          <span>Can I customize the client growth audit PDF?</span>
+          <span class="text-cyanAccent-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-4 text-slate-300 text-sm leading-relaxed">
+          Yes! In the Settings panel, you can set your agency name, custom services offered, and consultation call booking URL. These details will be automatically branded onto every generated PDF audit report.
+        </p>
+      </details>
+
+      <details class="glass-card rounded-xl p-6 group cursor-pointer">
+        <summary class="font-bold text-base text-white flex justify-between items-center list-none">
+          <span>Where is my prospect data stored?</span>
+          <span class="text-cyanAccent-400 group-open:rotate-180 transition-transform">▼</span>
+        </summary>
+        <p class="mt-4 text-slate-300 text-sm leading-relaxed">
+          100% of your saved prospects, pipeline notes, and audit history are stored in your local browser sandbox (<code class="text-cyanAccent-400 font-mono">chrome.storage.local</code>). We do not operate remote databases storing your leads.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <!-- Bottom CTA Banner -->
+  <section id="install" class="py-20 relative overflow-hidden">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="relative rounded-3xl p-8 sm:p-14 bg-gradient-to-r from-brand-700 via-blue-700 to-cyan-600 shadow-2xl text-center overflow-hidden">
+        <div class="relative z-10 space-y-6">
+          <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+            Supercharge Your Outreach Today
+          </h2>
+          <p class="text-blue-100 text-base sm:text-lg max-w-2xl mx-auto">
+            Install ProspectLens directly into Google Chrome and generate your first client-winning audit PDF in the next 60 seconds.
+          </p>
+          <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="https://chrome.google.com/webstore" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center space-x-3 px-8 py-4 rounded-xl bg-white text-brand-800 hover:bg-slate-100 font-bold text-base shadow-xl transition-all hover:scale-105">
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.383 0 0 5.383 0 12s5.383 12 12 12 12-5.383 12-12S18.617 0 12 0zm0 4.8a7.2 7.2 0 110 14.4 7.2 7.2 0 010-14.4zm0 2.4a4.8 4.8 0 100 9.6 4.8 4.8 0 000-9.6zm0 2.4a2.4 2.4 0 110 4.8 2.4 2.4 0 010-4.8z"/></svg>
+              <span>Add to Chrome (Free)</span>
+            </a>
+            <a href="https://github.com/HuttyBuddy/ProspectLens" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-4 rounded-xl bg-brand-900/60 hover:bg-brand-900/80 text-white font-semibold text-base border border-blue-400/30 transition-colors">
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+              <span>View Source on GitHub</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 bg-slateDark-950 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center space-x-3">
+          <img src="assets/icon-48.png" alt="ProspectLens" class="w-8 h-8 rounded-lg bg-slate-900 p-0.5">
+          <span class="font-bold text-base text-white tracking-tight">ProspectLens</span>
+          <span class="text-xs text-slate-500">© 2026 ProspectLens. All rights reserved.</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-6 text-sm text-slate-400">
+          <a href="privacy.html" class="hover:text-cyanAccent-400 transition-colors">Privacy Policy</a>
+          <a href="#features" class="hover:text-cyanAccent-400 transition-colors">Features</a>
+          <a href="#deliverables" class="hover:text-cyanAccent-400 transition-colors">Audit PDF</a>
+          <a href="#pricing" class="hover:text-cyanAccent-400 transition-colors">Pricing</a>
+          <a href="https://github.com/HuttyBuddy/ProspectLens" target="_blank" class="hover:text-cyanAccent-400 transition-colors">GitHub</a>
+          <a href="mailto:privacy@prospectlens.app" class="hover:text-cyanAccent-400 transition-colors">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script for Interactive Screenshot Tab Switcher -->
+  <script>
+    const screenshots = [
+      {
+        src: 'assets/screenshot-1-overview-1280x800.jpg',
+        caption: '1. Instant side panel evaluation: health score, key contacts, and detected revenue opportunities.'
+      },
+      {
+        src: 'assets/screenshot-2-audit-pdf-1280x800.jpg',
+        caption: '2. Executive client-ready Growth Audit PDF deliverable with custom branding and tactical roadmap.'
+      },
+      {
+        src: 'assets/screenshot-3-outreach-and-ad-1280x800.jpg',
+        caption: '3. Multi-channel tailored outreach pitches (Email, LinkedIn, SMS) and Meta/Google ad concepts.'
+      },
+      {
+        src: 'assets/screenshot-4-crm-sync-export-1280x800.jpg',
+        caption: '4. 1-click GoHighLevel CRM webhook dispatch and standardized RFC-4180 CSV pipeline export.'
+      }
+    ];
+
+    function switchTab(index) {
+      const img = document.getElementById('galleryImg');
+      const caption = document.getElementById('galleryCaption');
+      const buttons = document.querySelectorAll('.tab-btn');
+
+      img.style.opacity = 0;
+      setTimeout(() => {
+        img.src = screenshots[index].src;
+        caption.innerText = screenshots[index].caption;
+        img.style.opacity = 1;
+      }, 150);
+
+      buttons.forEach((btn, idx) => {
+        if (idx === index) {
+          btn.className = 'tab-btn px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm transition-all bg-brand-600 text-white shadow-lg shadow-brand-600/30';
+        } else {
+          btn.className = 'tab-btn px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm transition-all bg-slate-800/80 text-slate-400 hover:text-white';
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

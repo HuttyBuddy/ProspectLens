@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — ProspectLens Chrome Extension</title>
+  <meta name="description" content="Chrome Web Store compliant Privacy Policy for ProspectLens: Single Purpose statement, permissions justifications, and local-first data protection.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/icon-16.png">
+  <link rel="apple-touch-icon" sizes="128x128" href="assets/icon-128.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            },
+            cyanAccent: {
+              400: '#38bdf8',
+              500: '#06b6d4',
+            },
+            emeraldAccent: {
+              400: '#34d399',
+              500: '#10b981',
+            },
+            slateDark: {
+              800: '#1e293b',
+              850: '#151f32',
+              900: '#0f172a',
+              950: '#020617',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #020617;
+      color: #f8fafc;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+    }
+    .prose-dark {
+      color: #cbd5e1;
+    }
+    .prose-dark h2 {
+      color: #ffffff;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+    }
+    .prose-dark h3 {
+      color: #38bdf8;
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-top: 1.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .prose-dark p, .prose-dark ul {
+      line-height: 1.75;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+    .prose-dark ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+    }
+    .prose-dark li {
+      margin-bottom: 0.5rem;
+    }
+    .prose-dark table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+    .prose-dark th {
+      background-color: rgba(30, 41, 59, 0.8);
+      color: #ffffff;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border: 1px solid rgba(51, 65, 85, 0.6);
+      font-weight: 600;
+    }
+    .prose-dark td {
+      padding: 0.75rem 1rem;
+      border: 1px solid rgba(51, 65, 85, 0.4);
+      background-color: rgba(15, 23, 42, 0.4);
+      color: #cbd5e1;
+    }
+    .prose-dark code {
+      background-color: rgba(30, 41, 59, 0.8);
+      color: #38bdf8;
+      padding: 0.15rem 0.4rem;
+      border-radius: 0.25rem;
+      font-family: monospace;
+      font-size: 0.85em;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slateDark-950 text-slate-100 antialiased selection:bg-brand-600 selection:text-white">
+
+  <!-- Ambient Light -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+    <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-brand-600/10 rounded-full blur-[140px]"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <a href="index.html" class="flex items-center space-x-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-600 to-cyan-500 p-0.5 shadow-md group-hover:scale-105 transition-transform">
+          <img src="assets/icon-128.png" alt="ProspectLens Logo" class="w-full h-full object-contain rounded-[10px] bg-slateDark-950">
+        </div>
+        <div class="flex flex-col">
+          <span class="font-bold text-lg text-white group-hover:text-cyanAccent-400 transition-colors">ProspectLens</span>
+          <span class="text-xs text-slate-400">Privacy &amp; Security Policy</span>
+        </div>
+      </a>
+
+      <div class="flex items-center space-x-4">
+        <a href="index.html" class="inline-flex items-center space-x-1.5 text-sm font-semibold text-slate-300 hover:text-cyanAccent-400 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          <span>Back to Home</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    
+    <!-- Title & Metadata -->
+    <div class="border-b border-slate-800 pb-8 mb-10">
+      <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-md bg-brand-600/20 border border-brand-500/30 text-xs font-bold uppercase tracking-wider text-cyanAccent-400 mb-4">
+        Chrome Web Store Policy Compliance
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">Privacy Policy</h1>
+      <div class="mt-4 flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-400">
+        <span><strong>Effective Date:</strong> September 23, 2026</span>
+        <span>•</span>
+        <span><strong>Last Updated:</strong> September 23, 2026</span>
+        <span>•</span>
+        <span><strong>Application:</strong> ProspectLens Chrome Extension</span>
+      </div>
+    </div>
+
+    <!-- Policy Content Body -->
+    <article class="prose-dark">
+      
+      <p class="text-base leading-relaxed">
+        ProspectLens ("we", "our", or "the Extension") is dedicated to protecting user privacy, ensuring absolute transparency, and operating under a strict <strong>local-first, minimal-permission architecture</strong>. This Privacy Policy outlines what information ProspectLens analyzes, why specific permissions are required under Chrome Web Store policies, and how your data is handled.
+      </p>
+
+      <h2>1. Single Purpose Statement</h2>
+      <p>
+        In accordance with the Chrome Web Store Developer Program Policies, ProspectLens has a single, focused purpose:
+      </p>
+      <div class="p-5 rounded-xl bg-slate-900/90 border border-brand-500/30 text-slate-200 font-medium">
+        "ProspectLens assists sales professionals, consultants, and marketing agencies in inspecting public website markup on the active browser tab to generate conversion audit reports, tailored sales outreach pitches, and client growth audit deliverables."
+      </div>
+      <p class="mt-4">
+        ProspectLens does not function as a generalized web crawler, ad injector, browsing monitor, or affiliate tracker. All computational analysis is executed strictly on-demand when explicitly triggered by the user.
+      </p>
+
+      <h2>2. Information Analyzed &amp; How It Is Handled</h2>
+      
+      <h3>A. Public Business Information (Analyzed On-Demand)</h3>
+      <p>
+        When you open the side panel and initiate an analysis of a public website, ProspectLens parses the active tab's Document Object Model (DOM) to extract:
+      </p>
+      <ul>
+        <li><strong>Business Identity:</strong> Company or organization name, domain, brand category, and publicly displayed social media profile links (e.g., LinkedIn, X/Twitter, Facebook, Instagram, YouTube).</li>
+        <li><strong>Public Contact Points:</strong> Visible telephone numbers (hyperlinked via <code>tel:</code> tags or visible regex patterns), publicly posted email addresses (hyperlinked via <code>mailto:</code> tags), and physical business addresses displayed in the page footer or contact sections.</li>
+        <li><strong>Website Conversion Health Signals:</strong> Structural and technical elements such as primary hero headline clarity, presence of clear Call-To-Action (CTA) buttons, lead capture forms, customer testimonial badges, video embeds, viewport responsive tags, and Schema.org structured data.</li>
+      </ul>
+
+      <h3>B. Information We NEVER Collect or Access</h3>
+      <ul>
+        <li><strong>No Personal Browsing History:</strong> We do not track, monitor, log, or record URLs you visit outside of an explicit analysis click.</li>
+        <li><strong>No Keystrokes or Private Forms:</strong> We do not capture password fields, credit card inputs, search engine queries, or form submissions.</li>
+        <li><strong>No Personal Authentication Data:</strong> We do not inspect session cookies, authentication headers, tokens, or private accounts.</li>
+        <li><strong>No Automated Background Scraping:</strong> ProspectLens never executes in the background without user interaction.</li>
+        <li><strong>No Private Network Access:</strong> ProspectLens does not inspect intranet or local network endpoints without explicit user intent.</li>
+      </ul>
+
+      <h2>3. Chrome Extension Permissions Justification</h2>
+      <p>
+        ProspectLens requests only the minimum set of permissions necessary to deliver its core features. The justification for each declared permission in <code>manifest.json</code> is detailed below:
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 25%;">Permission</th>
+            <th>Technical Need &amp; Justification</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>sidePanel</code></td>
+            <td>Allows the extension to render the copilot workflow in Chrome's dedicated side panel companion view, keeping the target webpage fully visible without injecting intrusive overlays into the page.</td>
+          </tr>
+          <tr>
+            <td><code>activeTab</code></td>
+            <td>Grants temporary, user-consented access to inspect the DOM of the single webpage the user is actively viewing when they open the side panel or request an audit.</td>
+          </tr>
+          <tr>
+            <td><code>scripting</code></td>
+            <td>Enables programmatic injection of our lightweight, read-only extraction script into the active tab to safely inspect HTML elements and Schema.org markup.</td>
+          </tr>
+          <tr>
+            <td><code>storage</code></td>
+            <td>Permits the extension to save your prospect pipeline, user settings (such as your agency name and custom services), and audit history locally on your machine using <code>chrome.storage.local</code>.</td>
+          </tr>
+          <tr>
+            <td><code>host_permissions</code><br><code>http://*/*</code><br><code>https://*/*</code></td>
+            <td>Required to allow the user to analyze arbitrary public business websites across both HTTP and HTTPS protocols. No extraction occurs unless the user triggers the action.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>4. Local-First Architecture &amp; Data Storage</h2>
+      <p>
+        ProspectLens operates on a <strong>Local-First philosophy</strong>:
+      </p>
+      <ul>
+        <li>All prospect records, generated pitch copy, and executive audit summaries reside in your browser's local sandbox storage (<code>chrome.storage.local</code>).</li>
+        <li>We do not operate remote databases that aggregate, store, or profile the prospects you analyze.</li>
+        <li>Generated PDF documents (such as the 1-Click Client Growth Audit PDF) are compiled entirely within your browser using client-side JavaScript. No document generation request is sent to an external server.</li>
+      </ul>
+
+      <h2>5. Chrome Web Store User Data Compliance &amp; Non-Sale Guarantee</h2>
+      <p>
+        ProspectLens strictly adheres to the <strong>Google Chrome Web Store Developer Program Policies</strong>, including the Limited Use requirements:
+      </p>
+      <ul>
+        <li><strong>No Sale of Data:</strong> We do not sell, rent, lease, or monetize user data, browsing information, or extracted prospect details to any third-party brokers, data aggregators, or advertising networks.</li>
+        <li><strong>No Ad Targeting:</strong> Extracted data is never utilized for targeted advertising, credit assessment, or personalized ad profiling.</li>
+        <li><strong>No Unrelated Use:</strong> Analyzed data is exclusively used to display conversion metrics and provide outreach suggestions inside the extension interface.</li>
+      </ul>
+
+      <h2>6. Regulatory Compliance &amp; Protected Categories</h2>
+      <p>
+        ProspectLens incorporates automated non-scrape filtering (<code>isRestrictedProspect</code>) that programmatically excludes professional categories subject to strict solicitation and confidentiality regulations:
+      </p>
+      <ul>
+        <li><strong>Legal Practices:</strong> Law firms, attorneys, legal defense counsel, and solicitor chambers.</li>
+        <li><strong>Real Estate Brokerages:</strong> Real estate agencies and brokerages subject to MLS/IDX data protection rules.</li>
+      </ul>
+      <p>
+        When such websites are detected, ProspectLens halts automated extraction and alerts the user to respect industry-specific outreach standards.
+      </p>
+
+      <h2>7. Optional Third-Party Webhooks (GoHighLevel / Zapier / Make)</h2>
+      <p>
+        ProspectLens provides an optional feature allowing users to sync prospect data to external customer relationship management (CRM) systems:
+      </p>
+      <ul>
+        <li>Webhook endpoints are configured entirely by the user in the extension Settings panel.</li>
+        <li>ProspectLens only sends an HTTP POST request to the designated webhook URL when the user explicitly clicks <em>"Sync to CRM"</em>.</li>
+        <li>The payload transmitted contains only the public business contact details and audit summary currently displayed on screen.</li>
+      </ul>
+
+      <h2>8. User Control, Data Retention &amp; Deletion</h2>
+      <p>
+        You maintain complete ownership and control over all data stored within ProspectLens:
+      </p>
+      <ul>
+        <li><strong>Export Data:</strong> You may export your entire saved pipeline at any time as an RFC-4180 compliant CSV file with UTF-8 BOM encoding.</li>
+        <li><strong>Purge Storage:</strong> You can wipe all saved prospects, audit histories, and configured settings at any time by navigating to Settings &rarr; Clear All Stored Data.</li>
+        <li><strong>Uninstall Deletion:</strong> Removing or uninstalling ProspectLens from Google Chrome instantly purges all data stored in <code>chrome.storage.local</code>.</li>
+      </ul>
+
+      <h2>9. Security Architecture</h2>
+      <p>
+        ProspectLens complies with modern web extension security standards:
+      </p>
+      <ul>
+        <li><strong>Manifest V3 Compliance:</strong> Operates strictly under Manifest V3 specifications. Arbitrary code execution (e.g. <code>eval()</code>) and remote script injection are completely disallowed.</li>
+        <li><strong>Sanitized UI Rendering:</strong> All dynamic text retrieved from external web pages is sanitized and rendered via React text nodes to prevent Cross-Site Scripting (XSS).</li>
+        <li><strong>No Hardcoded API Secrets:</strong> The extension requires no client-side secret keys and handles operations through secure, user-managed configurations.</li>
+      </ul>
+
+      <h2>10. Updates to This Policy</h2>
+      <p>
+        We may update this Privacy Policy from time to time to reflect changes in our practices or legal obligations. When changes are made, the "Last Updated" date at the top of this policy will be revised. Significant changes will be announced in release notes on our public GitHub repository.
+      </p>
+
+      <h2>11. Contact Information &amp; Support</h2>
+      <p>
+        For inquiries regarding this Privacy Policy, permissions justification, or data handling practices, please contact our team:
+      </p>
+      <div class="p-6 rounded-xl bg-slate-900 border border-slate-800 space-y-2 text-sm text-slate-300">
+        <div><strong>Organization:</strong> ProspectLens Core Team</div>
+        <div><strong>Email:</strong> <a href="mailto:privacy@prospectlens.app" class="text-cyanAccent-400 hover:underline">privacy@prospectlens.app</a></div>
+        <div><strong>GitHub Repository:</strong> <a href="https://github.com/HuttyBuddy/ProspectLens" target="_blank" rel="noopener noreferrer" class="text-cyanAccent-400 hover:underline">https://github.com/HuttyBuddy/ProspectLens</a></div>
+        <div><strong>Developer Website:</strong> <a href="https://huttybuddy.github.io/ProspectLens/" class="text-cyanAccent-400 hover:underline">https://huttybuddy.github.io/ProspectLens/</a></div>
+      </div>
+
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 bg-slateDark-950 py-10 mt-16">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <div class="flex items-center space-x-2">
+        <span>© 2026 ProspectLens. All rights reserved.</span>
+      </div>
+      <div class="flex items-center space-x-6">
+        <a href="index.html" class="hover:text-slate-300 transition-colors">Home</a>
+        <a href="index.html#features" class="hover:text-slate-300 transition-colors">Features</a>
+        <a href="https://github.com/HuttyBuddy/ProspectLens" target="_blank" class="hover:text-slate-300 transition-colors">GitHub</a>
+        <a href="mailto:privacy@prospectlens.app" class="hover:text-slate-300 transition-colors">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
