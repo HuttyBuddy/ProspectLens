@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "ProspectLens - B2B Prospecting Copilot",
   "version": "1.0.0",
-  "description": "Audit local business websites, generate client PDF audits, and sync leads with custom video ad hooks to GoHighLevel & Zapier.",
+  "description": "Audit business websites, generate client growth audit PDFs, and sync leads with custom outreach hooks to your CRM via webhooks.",
   "permissions": [
     "sidePanel",
     "activeTab",

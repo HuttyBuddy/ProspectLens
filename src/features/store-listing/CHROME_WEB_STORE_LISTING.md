@@ -9,7 +9,7 @@ Official submission assets, metadata, descriptions, category tags, single-purpos
 | Field | Character Limit | Form Submission Value | Character Count |
 | :--- | :--- | :--- | :--- |
 | **Extension Name** | 45 chars max | `ProspectLens: B2B Lead & Video Ad Copilot` | 41 chars |
-| **Short Description** | 132 chars max | `Audit local business websites, generate client PDF audits, and sync leads with custom video ad hooks to GoHighLevel & Zapier.` | 126 chars |
+| **Short Description** | 132 chars max | `Audit business websites, generate client growth audit PDFs, and sync leads with custom outreach hooks to your CRM via webhooks.` | 124 chars |
 | **Version** | Semantic | `1.0.0` | - |
 | **Primary Category** | Dropdown | `Productivity` | - |
 | **Secondary Category** | Dropdown | `Workflow & Planning` | - |
@@ -23,7 +23,7 @@ Official submission assets, metadata, descriptions, category tags, single-purpos
 
 ## 🔍 2. Search Keywords & Tags
 ```
-b2b prospecting, lead generation, cold email, gohighlevel, zapier, agency copilot, website audit, conversion rate optimization, video ad generator, client audit pdf, seo audit, local seo, smartlead, instantly, marketing agency
+b2b prospecting, lead generation, cold email, agency copilot, website audit, conversion rate optimization, video ad generator, client audit pdf, seo audit, local seo, marketing agency, sales prospecting, outreach copywriter, sales pipeline
 ```
 
 ---
@@ -42,25 +42,25 @@ ProspectLens is the premier B2B prospecting copilot built directly into your Chr
 📊 1. Instant 4-Pillar Website Conversion Audit
 Stop manually checking websites. In 1 click, ProspectLens scans:
 • Conversion Architecture (Click-to-call, lead capture forms, quote schedulers)
-• Video & Modern Creative (Short-form video presence, YouTube/Vimeo embeds, TikTok/Reels gaps)
-• Social Proof & Authority (Google review ratings, review volume, schema markup)
+• Video & Modern Creative (Short-form video presence, video embeds, social video gaps)
+• Social Proof & Authority (Customer review ratings, review volume, schema markup)
 • Mobile & On-Page SEO (Meta tags, viewport scaling, local search readiness)
 Get an objective 0–100 Conversion Health Score and instant diagnosis of the top revenue bottlenecks costing that business money.
 
 📄 2. 1-Page Client PDF Audit Report
 Generate a beautifully formatted, vector-sharp A4 PDF growth audit stamped with your agency's name, logo, contact info, and calendar booking link. Hand it to prospective clients during cold calls, discovery meetings, or follow-up emails to demonstrate tangible value before you ask for a dime.
 
-🎬 3. AI Short-Form Video Commercial Prompts (Google Flow & Veo Ready)
-Local businesses are losing 82% of customer attention because they lack modern short-form video commercials. ProspectLens generates cinematic, shot-by-shot text-to-video prompts (tailored for Google Veo, OpenAI Sora, Runway Gen-3, or Pika) complete with camera angles, lighting, sound design, and local branding hooks ready to pitch.
+🎬 3. AI Short-Form Video Commercial Prompts
+Local businesses are losing customer attention because they lack modern short-form video commercials. ProspectLens generates cinematic, shot-by-shot text-to-video prompts (tailored for modern generative AI video platforms) complete with camera angles, lighting, sound design, and local branding hooks ready to pitch.
 
 ✉️ 4. Personalized Cold Outreach Copywriter
 Generate personalized cold emails, SMS hooks, LinkedIn DMs, and cold call battle-cards based on specific weaknesses observed on the business's actual website. No generic templates—every message references real observations (e.g. missing speed-to-lead follow-up or lack of social proof).
 
-⚡ 5. 1-Click Agency CRM & Webhook Sync (GoHighLevel / Zapier / HubSpot)
-Send verified prospect data, 4-pillar audit scores, identified bottlenecks, and customized outreach scripts directly into your GoHighLevel sub-account, Zapier webhook, Make.com scenario, or HubSpot CRM in a single click.
+⚡ 5. 1-Click Agency CRM & Inbound Webhook Sync
+Send verified prospect data, 4-pillar audit scores, identified bottlenecks, and customized outreach scripts directly into your CRM, inbound webhook endpoints, or automation workflows in a single click.
 
-📥 6. Bulk CSV / Excel Exporter for Cold Email Tools
-Export your saved leads with computed audit scores, pain point variables, and personalized subject lines formatted directly for cold outreach senders like Instantly.ai, Smartlead.ai, and Apollo.io. Uses UTF-8 BOM encoding so files open in Microsoft Excel without corrupted characters.
+📥 6. Bulk CSV / Excel Exporter for Cold Outreach Sequencers
+Export your saved leads with computed audit scores, pain point variables, and personalized subject lines formatted directly for cold outreach sequencers and sales engagement platforms. Uses UTF-8 BOM encoding so files open cleanly in spreadsheet software without corrupted characters.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🎯 WHO IS PROSPECTLENS FOR?
@@ -74,8 +74,8 @@ Export your saved leads with computed audit scores, pain point variables, and pe
 💎 SUBSCRIPTION PLANS & TIERS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 • Free Plan: 5 free website scans per month, basic prospecting scorecard, and up to 3 lead exports.
-• Pro Solopreneur ($49/month): Unlimited website scans, unlimited pipeline leads, 1-click Client PDF Audits, full Instantly/Smartlead CSV export, and video ad generator.
-• Agency Scale ($119/month): Everything in Pro plus 1-Click GoHighLevel & Zapier Webhook sync, whitelabel client PDF branding, and priority updates.
+• Pro Solopreneur ($49/month): Unlimited website scans, unlimited pipeline leads, 1-click Client PDF Audits, full sequencer-ready CSV export, and video ad generator.
+• Agency Scale ($119/month): Everything in Pro plus 1-Click CRM Webhook direct dispatch, whitelabel client PDF branding, and priority updates.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🔒 PRIVACY & ETHICAL COMPLIANCE
@@ -121,7 +121,7 @@ All generated visual assets follow Google Chrome Web Store specifications, with 
 | **Screenshot 1: Overview & Audit** | 1280 x 800 px (JPEG) | [`assets/screenshot-1-overview-1280x800.jpg`](file:///f:/ProspectLens/src/features/store-listing/assets/screenshot-1-overview-1280x800.jpg) | Turn any local business website into an opportunity with live sidepanel copilot. |
 | **Screenshot 2: PDF Deliverables** | 1280 x 800 px (JPEG) | [`assets/screenshot-2-audit-pdf-1280x800.jpg`](file:///f:/ProspectLens/src/features/store-listing/assets/screenshot-2-audit-pdf-1280x800.jpg) | 1-click professional client growth audit PDF reports with 4-pillar scorecard. |
 | **Screenshot 3: Outreach & Video Ads** | 1280 x 800 px (JPEG) | [`assets/screenshot-3-outreach-and-ad-1280x800.jpg`](file:///f:/ProspectLens/src/features/store-listing/assets/screenshot-3-outreach-and-ad-1280x800.jpg) | Cold email pitches, SMS hooks, and AI vertical video storyboard angles. |
-| **Screenshot 4: CRM Sync & Export** | 1280 x 800 px (JPEG) | [`assets/screenshot-4-crm-sync-export-1280x800.jpg`](file:///f:/ProspectLens/src/features/store-listing/assets/screenshot-4-crm-sync-export-1280x800.jpg) | 1-click GoHighLevel webhook sync and bulk CSV export ready for Instantly & Apollo. |
+| **Screenshot 4: CRM Sync & Export** | 1280 x 800 px (JPEG) | [`assets/screenshot-4-crm-sync-export-1280x800.jpg`](file:///f:/ProspectLens/src/features/store-listing/assets/screenshot-4-crm-sync-export-1280x800.jpg) | 1-click CRM webhook sync and bulk CSV export ready for outreach sequencers. |
 | **Extension Store Icon** | 128 x 128 px (PNG) | [`public/icons/icon-128.png`](file:///f:/ProspectLens/public/icons/icon-128.png) | 96x96 inner squircle icon with 16px transparent padding on all 4 sides. |
 
 ---
