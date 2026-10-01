@@ -45,6 +45,9 @@ export interface SavedProspect {
   chosenService?: string;
   savedOutreach?: OutreachMessage;
   status: PipelineStatus;
+  /** Snapshot of the 5-pillar audit at save time (powers benchmark + re-scan baselines). */
+  pillarScores?: Array<{ id: string; category: string; score: number }>;
+  overallScore?: number;
 }
 
 export interface PipelineFilterOptions {

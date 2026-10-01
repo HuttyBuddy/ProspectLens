@@ -3,7 +3,8 @@ import {
   SubscriptionTier,
   DEFAULT_LICENSE_STATE,
   FREE_TIER_SCAN_LIMIT,
-  FREE_TIER_PROSPECT_LIMIT
+  FREE_TIER_PROSPECT_LIMIT,
+  emailFindLimitForTier
 } from './types';
 
 const LICENSE_STORAGE_KEY = 'prospectlens_license_state';
@@ -34,6 +35,8 @@ export async function getLicenseState(): Promise<UserLicenseState> {
   state.isAgency = state.tier === 'agency';
   state.scansMonthlyLimit = state.isPro ? Infinity : FREE_TIER_SCAN_LIMIT;
   state.savedProspectsLimit = state.isPro ? Infinity : FREE_TIER_PROSPECT_LIMIT;
+  state.emailFindsMonthlyLimit = emailFindLimitForTier(state.tier);
+  if (typeof state.emailFindsUsedThisMonth !== 'number') state.emailFindsUsedThisMonth = 0;
 
   return state;
 }
@@ -44,7 +47,8 @@ export async function saveLicenseState(state: UserLicenseState): Promise<void> {
     isPro: state.tier === 'pro' || state.tier === 'agency',
     isAgency: state.tier === 'agency',
     scansMonthlyLimit: (state.tier === 'pro' || state.tier === 'agency') ? Infinity : FREE_TIER_SCAN_LIMIT,
-    savedProspectsLimit: (state.tier === 'pro' || state.tier === 'agency') ? Infinity : FREE_TIER_PROSPECT_LIMIT
+    savedProspectsLimit: (state.tier === 'pro' || state.tier === 'agency') ? Infinity : FREE_TIER_PROSPECT_LIMIT,
+    emailFindsMonthlyLimit: emailFindLimitForTier(state.tier)
   };
 
   if (typeof chrome !== 'undefined' && chrome.storage?.local) {
@@ -113,7 +117,8 @@ export async function setSubscriptionTier(tier: SubscriptionTier): Promise<UserL
     isPro: tier === 'pro' || tier === 'agency',
     isAgency: tier === 'agency',
     scansMonthlyLimit: (tier === 'pro' || tier === 'agency') ? Infinity : FREE_TIER_SCAN_LIMIT,
-    savedProspectsLimit: (tier === 'pro' || tier === 'agency') ? Infinity : FREE_TIER_PROSPECT_LIMIT
+    savedProspectsLimit: (tier === 'pro' || tier === 'agency') ? Infinity : FREE_TIER_PROSPECT_LIMIT,
+    emailFindsMonthlyLimit: emailFindLimitForTier(tier)
   };
   await saveLicenseState(updated);
   return updated;
@@ -137,4 +142,34 @@ export async function setScanUsageCount(count: number): Promise<UserLicenseState
   current.scansUsedThisMonth = Math.max(0, count);
   await saveLicenseState(current);
   return current;
+}
+
+/**
+ * Checks whether an email-find run can proceed and records usage (count = verified candidates).
+ */
+export async function recordEmailFindUsage(count: number): Promise<{ allowed: boolean; remaining: number; state: UserLicenseState }> {
+  const state = await getLicenseState();
+  const limit = state.emailFindsMonthlyLimit;
+
+  if (state.emailFindsUsedThisMonth >= limit) {
+    return { allowed: false, remaining: 0, state };
+  }
+
+  state.emailFindsUsedThisMonth = Math.min(limit, state.emailFindsUsedThisMonth + Math.max(0, count));
+  await saveLicenseState(state);
+
+  return {
+    allowed: true,
+    remaining: Math.max(0, limit - state.emailFindsUsedThisMonth),
+    state
+  };
+}
+
+/**
+ * Whether the user can run another email-find pass right now.
+ */
+export async function canFindEmails(): Promise<{ allowed: boolean; remaining: number; limit: number; state: UserLicenseState }> {
+  const state = await getLicenseState();
+  const remaining = Math.max(0, state.emailFindsMonthlyLimit - state.emailFindsUsedThisMonth);
+  return { allowed: remaining > 0, remaining, limit: state.emailFindsMonthlyLimit, state };
 }

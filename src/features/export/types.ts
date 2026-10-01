@@ -62,7 +62,7 @@ export const EXPORT_PRESETS: ExportPresetConfig[] = [
     id: 'full_audit',
     name: 'Full Audit Intelligence (All 26+ Columns)',
     badge: 'COMPREHENSIVE',
-    description: 'Complete data export with 4-pillar audit scores, bottleneck diagnostics, financials, and outreach scripts.',
+    description: 'Complete data export with 5-pillar audit scores, bottleneck diagnostics, financials, and outreach scripts.',
     recommendedFor: 'Deep Analysis, Google Sheets, AirTable, Custom Databases',
     columns: [
       'Business Name',

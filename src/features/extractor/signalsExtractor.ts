@@ -1,6 +1,45 @@
 import { AuditItem, MarketingAudit } from './types';
 import { checkExclusionPolicy } from './exclusionPolicy';
 
+interface LocalBusinessSchema {
+  type: string;
+  name?: string;
+  streetAddress?: string;
+  areaServed?: boolean;
+}
+
+/** Parse JSON-LD blocks for a LocalBusiness/Organization schema entry. */
+export function parseLocalBusinessSchema(doc: Document): LocalBusinessSchema | null {
+  const scripts = Array.from(doc.querySelectorAll('script[type="application/ld+json"]'));
+  for (const script of scripts) {
+    try {
+      const parsed = JSON.parse(script.textContent || '');
+      const nodes = Array.isArray(parsed) ? parsed : parsed['@graph'] ? parsed['@graph'] : [parsed];
+      for (const node of nodes) {
+        const type = node && typeof node === 'object' ? String(node['@type'] || '') : '';
+        if (/localbusiness|organization|plumber|roofer|dentist|electrician|contractor|restaurant|store/i.test(type)) {
+          const addr = node['address'];
+          const addressObj = Array.isArray(addr) ? addr[0] : addr;
+          const street = typeof addressObj === 'string'
+            ? addressObj
+            : addressObj && typeof addressObj === 'object'
+              ? String(addressObj['streetAddress'] || addressObj['name'] || '')
+              : '';
+          return {
+            type,
+            name: node['name'] ? String(node['name']) : undefined,
+            streetAddress: street || undefined,
+            areaServed: Boolean(node['areaServed'])
+          };
+        }
+      }
+    } catch {
+      // Ignore malformed JSON-LD blocks.
+    }
+  }
+  return null;
+}
+
 export function extractMarketingAudit(doc: Document, url: string): MarketingAudit {
   const policy = checkExclusionPolicy(doc, url);
   if (policy.isRestricted) {
@@ -326,8 +365,199 @@ export function extractMarketingAudit(doc: Document, url: string): MarketingAudi
     });
   }
 
+  // ─── 5th Pillar: Local SEO & Google Business Presence ───
+  const localBiz = parseLocalBusinessSchema(doc);
+
+  // 13. LocalBusiness / Organization JSON-LD schema
+  if (localBiz) {
+    items.push({
+      id: 'local-schema',
+      category: 'Local SEO',
+      label: 'LocalBusiness Schema Markup',
+      status: 'Strong',
+      evidence: `Structured ${localBiz.type} schema detected${localBiz.name ? ` for "${localBiz.name.slice(0, 50)}"` : ''}, feeding Google's local knowledge panel.`
+    });
+  } else if (jsonLd) {
+    items.push({
+      id: 'local-schema',
+      category: 'Local SEO',
+      label: 'LocalBusiness Schema Markup',
+      status: 'Weak',
+      evidence: 'JSON-LD exists but is not typed as a LocalBusiness/Organization — Google cannot confidently build a local knowledge panel.'
+    });
+  } else {
+    items.push({
+      id: 'local-schema',
+      category: 'Local SEO',
+      label: 'LocalBusiness Schema Markup',
+      status: 'Missing',
+      evidence: 'No LocalBusiness schema found. Missed opportunity for Google Maps and local pack rich results.'
+    });
+  }
+
+  // 14. NAP (Name / Address / Phone) completeness
+  const hasBizName = Boolean(
+    doc.querySelector('meta[property="og:site_name"]')?.getAttribute('content') ||
+    localBiz?.name ||
+    (doc.title || '').trim()
+  );
+  const hasStreetAddress = Boolean(
+    localBiz?.streetAddress ||
+    /\d{1,5}\s+[A-Za-z0-9.'-]+\s+(St|Street|Ave|Avenue|Rd|Road|Blvd|Boulevard|Ln|Lane|Dr|Drive|Ct|Court|Way|Pl|Place|Ter|Terrace)\b/i.test(bodyText)
+  );
+  const hasPhone = telLinks.length > 0 || /\b\d{3}[-.\s]\d{3}[-.\s]\d{4}\b/.test(bodyText);
+  const napCount = [hasBizName, hasStreetAddress, hasPhone].filter(Boolean).length;
+  if (napCount === 3) {
+    items.push({
+      id: 'local-nap',
+      category: 'Local SEO',
+      label: 'NAP Consistency (Name / Address / Phone)',
+      status: 'Strong',
+      evidence: 'Full NAP footprint detected: business name, street address, and phone number are all present on-page.'
+    });
+  } else if (napCount === 2) {
+    items.push({
+      id: 'local-nap',
+      category: 'Local SEO',
+      label: 'NAP Consistency (Name / Address / Phone)',
+      status: 'Present',
+      evidence: `Partial NAP footprint (${napCount}/3 signals). Inconsistent NAP data dilutes Google Maps ranking trust.`
+    });
+  } else if (napCount === 1) {
+    items.push({
+      id: 'local-nap',
+      category: 'Local SEO',
+      label: 'NAP Consistency (Name / Address / Phone)',
+      status: 'Weak',
+      evidence: 'Only one NAP signal found. Google needs name + address + phone together to verify a real local business.'
+    });
+  } else {
+    items.push({
+      id: 'local-nap',
+      category: 'Local SEO',
+      label: 'NAP Consistency (Name / Address / Phone)',
+      status: 'Missing',
+      evidence: 'No detectable business name, street address, or phone number — invisible to local search verification.'
+    });
+  }
+
+  // 15. Click-to-call tel: link (mobile local intent)
+  if (telLinks.length > 0) {
+    items.push({
+      id: 'local-click-to-call',
+      category: 'Local SEO',
+      label: 'Mobile Tap-to-Call',
+      status: 'Strong',
+      evidence: `${telLinks.length} tap-to-call link(s) detected — critical for "near me" mobile searchers.`
+    });
+  } else {
+    items.push({
+      id: 'local-click-to-call',
+      category: 'Local SEO',
+      label: 'Mobile Tap-to-Call',
+      status: 'Missing',
+      evidence: 'No tap-to-call link. Most local searches happen on mobile; one-tap calling is table stakes.'
+    });
+  }
+
+  // 16. Google Maps embed / link
+  const mapsEmbed = doc.querySelector('iframe[src*="google.com/maps"], iframe[src*="maps.google"]');
+  const mapsLink = Array.from(doc.querySelectorAll('a[href]')).some((a) => {
+    const href = (a.getAttribute('href') || '').toLowerCase();
+    return href.includes('google.com/maps') || href.includes('maps.google');
+  });
+  if (mapsEmbed) {
+    items.push({
+      id: 'local-maps',
+      category: 'Local SEO',
+      label: 'Google Maps Presence',
+      status: 'Strong',
+      evidence: 'Embedded Google Map found — reinforces the Google Business Profile location signal.'
+    });
+  } else if (mapsLink) {
+    items.push({
+      id: 'local-maps',
+      category: 'Local SEO',
+      label: 'Google Maps Presence',
+      status: 'Present',
+      evidence: 'Links out to Google Maps, but no embedded map widget to anchor the location visually.'
+    });
+  } else {
+    items.push({
+      id: 'local-maps',
+      category: 'Local SEO',
+      label: 'Google Maps Presence',
+      status: 'Missing',
+      evidence: 'No Google Maps embed or link. A map embed strengthens the local relevance signal for nearby searchers.'
+    });
+  }
+
+  // 17. Review-platform links (Google reviews, Yelp, Facebook)
+  const reviewLinks = Array.from(doc.querySelectorAll('a[href]')).filter((a) => {
+    const href = (a.getAttribute('href') || '').toLowerCase();
+    return (
+      href.includes('google.com/maps') ||
+      href.includes('g.page/') ||
+      href.includes('goo.gl/maps') ||
+      href.includes('yelp.com/biz/') ||
+      href.includes('facebook.com/') && (a.textContent || '').toLowerCase().includes('review') ||
+      href.includes('trustpilot.com/') ||
+      href.includes('birdeye.com/') ||
+      href.includes('podium.com/')
+    );
+  });
+  const reviewCta = /leave (us )?a review|write a review|review us on google/i.test(bodyText);
+  if (reviewLinks.length >= 2 || (reviewLinks.length >= 1 && reviewCta)) {
+    items.push({
+      id: 'local-reviews',
+      category: 'Local SEO',
+      label: 'Review Platform Footprint',
+      status: 'Strong',
+      evidence: `${reviewLinks.length} review-platform link(s) detected${reviewCta ? ' plus an on-page review call-to-action' : ''} — feeding the review flywheel Google ranks on.`
+    });
+  } else if (reviewLinks.length === 1 || reviewCta) {
+    items.push({
+      id: 'local-reviews',
+      category: 'Local SEO',
+      label: 'Review Platform Footprint',
+      status: 'Present',
+      evidence: 'Minimal review-platform presence. Systematic review collection is the highest-ROI local SEO lever.'
+    });
+  } else {
+    items.push({
+      id: 'local-reviews',
+      category: 'Local SEO',
+      label: 'Review Platform Footprint',
+      status: 'Weak',
+      evidence: 'No links to Google reviews, Yelp, or other review platforms found on the page.'
+    });
+  }
+
+  // 18. Service-area / geo relevance mentions
+  const hasAreaServed = Boolean(localBiz?.areaServed);
+  const geoMentions = /proudly serving|service area|serving the|areas we serve|locations:/i.test(bodyText);
+  if (hasAreaServed || geoMentions) {
+    items.push({
+      id: 'local-service-area',
+      category: 'Local SEO',
+      label: 'Service-Area & Geo Relevance',
+      status: hasAreaServed ? 'Strong' : 'Present',
+      evidence: hasAreaServed
+        ? 'Explicit service-area data published (schema areaServed) — Google can match the business to nearby searches.'
+        : 'Service-area language detected on-page; structured areaServed data would strengthen the signal.'
+    });
+  } else {
+    items.push({
+      id: 'local-service-area',
+      category: 'Local SEO',
+      label: 'Service-Area & Geo Relevance',
+      status: 'Weak',
+      evidence: 'No explicit service-area or geo-targeting language found — unclear which neighborhoods the business serves.'
+    });
+  }
+
   const missingCount = items.filter((i) => i.status === 'Missing' || i.status === 'Weak').length;
-  const summary = `Evaluated 12 core digital marketing signals: ${missingCount} growth opportunity areas identified.`;
+  const summary = `Evaluated ${items.length} core digital marketing signals: ${missingCount} growth opportunity areas identified.`;
 
   return {
     items,

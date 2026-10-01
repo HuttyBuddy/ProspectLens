@@ -96,4 +96,72 @@ describe('DOM & Metadata Extractor', () => {
     const trustFinding = audit.items.find((i) => i.id === 'trust-signals');
     expect(trustFinding?.status).toBe('Strong');
   });
+
+  it('evaluates Local SEO signals: full local footprint scores Strong', () => {
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Denver Drain Pros</title>
+          <script type="application/ld+json">
+            {
+              "@context": "https://schema.org",
+              "@type": "Plumber",
+              "name": "Denver Drain Pros",
+              "telephone": "(303) 555-0100",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "456 Elm St",
+                "addressLocality": "Denver",
+                "addressRegion": "CO"
+              },
+              "areaServed": "Denver Metro"
+            }
+          </script>
+        </head>
+        <body>
+          <h1>Denver's Trusted Drain Experts</h1>
+          <a href="tel:3035550100">Call Now</a>
+          <iframe src="https://www.google.com/maps/embed?pb=123"></iframe>
+          <a href="https://www.google.com/maps/place/Denver+Drain+Pros">Find us on Google Maps</a>
+          <a href="https://www.yelp.com/biz/denver-drain-pros">Yelp reviews</a>
+          <p>Leave us a review on Google!</p>
+          <p>Proudly serving the Denver metro area.</p>
+        </body>
+      </html>
+    `;
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const audit = extractMarketingAudit(doc, 'https://denverdrainpros.com');
+
+    const localItems = audit.items.filter((i) => i.category === 'Local SEO');
+    expect(localItems.length).toBe(6);
+
+    const byId = Object.fromEntries(localItems.map((i) => [i.id, i.status]));
+    expect(byId['local-schema']).toBe('Strong');
+    expect(byId['local-nap']).toBe('Strong');
+    expect(byId['local-click-to-call']).toBe('Strong');
+    expect(byId['local-maps']).toBe('Strong');
+    expect(byId['local-reviews']).toBe('Strong');
+    expect(byId['local-service-area']).toBe('Strong');
+  });
+
+  it('flags a thin local footprint as Missing/Weak', () => {
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head><title>Generic Biz</title></head>
+        <body><h1>Welcome to our website</h1><p>We do stuff.</p></body>
+      </html>
+    `;
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const audit = extractMarketingAudit(doc, 'https://genericbiz.com');
+
+    const byId = Object.fromEntries(
+      audit.items.filter((i) => i.category === 'Local SEO').map((i) => [i.id, i.status])
+    );
+    expect(byId['local-schema']).toBe('Missing');
+    expect(byId['local-maps']).toBe('Missing');
+    expect(byId['local-click-to-call']).toBe('Missing');
+    expect(['Weak', 'Missing']).toContain(byId['local-nap']);
+  });
 });

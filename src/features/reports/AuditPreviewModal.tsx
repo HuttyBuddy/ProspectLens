@@ -122,7 +122,7 @@ export const AuditPreviewModal: React.FC<AuditPreviewModalProps> = ({
             </div>
           </div>
 
-          {/* 4 Pillars Preview */}
+          {/* 5 Pillars Preview */}
           <div className="grid grid-cols-2 gap-2">
             {auditData.categoryScores.map((cat) => (
               <div key={cat.category} className="bg-slate-900/60 border border-slate-800/60 rounded-lg p-2 space-y-1">

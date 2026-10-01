@@ -7,7 +7,9 @@
     "sidePanel",
     "activeTab",
     "scripting",
-    "storage"
+    "storage",
+    "alarms",
+    "notifications"
   ],
   "host_permissions": [
     "http://*/*",
@@ -19,13 +21,22 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://extensionpay.com/*"],
-      "js": ["ExtPay.js"],
+      "matches": [
+        "https://extensionpay.com/*"
+      ],
+      "js": [
+        "ExtPay.js"
+      ],
       "run_at": "document_start"
     },
     {
-      "matches": ["http://*/*", "https://*/*"],
-      "js": ["features/extractor/contentScript.js"],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "features/extractor/contentScript.js"
+      ],
       "run_at": "document_idle"
     }
   ],

@@ -219,7 +219,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
                 <span>Free Plan Limit: Exporting first 3 of {leadCount} leads</span>
               </div>
               <p className="text-[11px] text-slate-400 leading-relaxed">
-                Upgrade to Pro Solopreneur for unlimited bulk lead exports, 4-pillar audit scores, and ready-to-send cold outreach scripts.
+                Upgrade to Pro Solopreneur for unlimited bulk lead exports, 5-pillar audit scores, and ready-to-send cold outreach scripts.
               </p>
               <button
                 type="button"

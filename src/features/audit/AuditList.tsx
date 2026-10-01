@@ -6,7 +6,7 @@ import { CheckCircle2, AlertTriangle, XCircle, HelpCircle, Eye } from 'lucide-re
 export const AuditList: React.FC<{ items: AuditItem[]; summary: string }> = ({ items, summary }) => {
   const [filter, setFilter] = React.useState<string>('All');
 
-  const categories = ['All', 'Website', 'Conversions', 'Trust', 'Content & Media'];
+  const categories = ['All', 'Website', 'Conversions', 'Trust', 'Content & Media', 'Local SEO'];
 
   const filteredItems = filter === 'All' ? items : items.filter((i) => i.category === filter);
 
