@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "ProspectLens - B2B Prospecting Copilot",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Audit business websites, generate client growth audit PDFs, and sync leads with custom outreach hooks to your CRM via webhooks.",
   "permissions": [
     "sidePanel",
