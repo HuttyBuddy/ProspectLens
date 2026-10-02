@@ -72,7 +72,7 @@ describe('Admin Panel & Diagnostics Logger', () => {
       5
     );
 
-    expect(report.extensionVersion).toBe('1.0.0');
+    expect(report.extensionVersion).toBe('2.0.0');
     expect(report.license.tier).toBe('pro');
     expect(report.storageStats.savedProspectsCount).toBe(5);
     expect(report.storageStats.logsCount).toBe(2);
