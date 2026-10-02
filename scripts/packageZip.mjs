@@ -7,7 +7,7 @@ import zlib from 'zlib';
 import { execSync } from 'child_process';
 
 const distDir = path.resolve('dist');
-const outZip = path.resolve('prospectlens-v1.0.0.zip');
+const outZip = path.resolve('prospectlens-v2.0.0.zip');
 
 if (!fs.existsSync(distDir)) {
   console.error('dist directory does not exist. Run "npm run build" first.');

@@ -640,7 +640,7 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
         {/* Footer */}
         <div className="p-3 border-t border-slate-800 bg-slate-950/80 flex items-center justify-between">
           <span className="text-[10px] text-slate-500">
-            ProspectLens v1.0.0 • Diagnostic System
+            ProspectLens v2.0.0 • Diagnostic System
           </span>
           <button
             onClick={onClose}

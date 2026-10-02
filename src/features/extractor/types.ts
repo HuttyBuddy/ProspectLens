@@ -38,7 +38,7 @@ export type AuditStatus = 'Strong' | 'Present' | 'Weak' | 'Missing' | 'Unable to
 
 export interface AuditItem {
   id: string;
-  category: 'Website' | 'Conversions' | 'Trust' | 'Content & Media';
+  category: 'Website' | 'Conversions' | 'Trust' | 'Content & Media' | 'Local SEO';
   label: string;
   status: AuditStatus;
   evidence: string;

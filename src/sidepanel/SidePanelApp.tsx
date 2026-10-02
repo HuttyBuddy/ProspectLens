@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { extractFromCurrentPage } from '../features/extractor/pageExtractor';
 import { isRestrictedProspect } from '../features/extractor/exclusionPolicy';
+import { computePillarScores, computeOverallScore } from '../features/reports/pillarScores';
 import { WebsiteExtractionResult } from '../features/extractor/types';
 import { evaluateOpportunities } from '../features/opportunities/opportunityRules';
 import { ServiceOpportunity, OpportunityEngineResult } from '../features/opportunities/opportunityTypes';
@@ -52,6 +52,10 @@ import {
 } from '../features/admin';
 import { Button } from '../shared/components/Button';
 import { Badge } from '../shared/components/Badge';
+import { EmailFinderPanel } from '../features/emailFinder/EmailFinderPanel';
+import { BenchmarkPanel } from '../features/benchmark/BenchmarkPanel';
+import { SchedulesPanel } from '../features/rescan/SchedulesPanel';
+import { runDueRescans } from '../features/rescan/rescanRunner';
 import {
   Search,
   Sparkles,
@@ -75,7 +79,7 @@ import {
   Download
 } from 'lucide-react';
 
-type TabType = 'Overview' | 'Opportunities' | 'Outreach' | 'Ad Concept' | 'Prospects' | 'Settings';
+type TabType = 'Overview' | 'Opportunities' | 'Outreach' | 'Ad Concept' | 'Emails' | 'Benchmark' | 'Prospects' | 'Settings';
 
 export const SidePanelApp: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('Overview');
@@ -201,6 +205,31 @@ export const SidePanelApp: React.FC = () => {
     initLogger();
     logInfo('SYSTEM', 'ProspectLens Sidepanel loaded');
     loadInitialData();
+
+    // Run any due scheduled re-scans (fetch + parse + diff in this DOM context).
+    runDueRescans()
+      .then((results) => {
+        const failed = results.filter((r) => !r.success);
+        if (failed.length > 0) {
+          logWarn('RESCAN', `${failed.length} scheduled re-scan(s) failed`, failed);
+        }
+      })
+      .catch((err) => logWarn('RESCAN', 'Due re-scan check failed', err));
+
+    // Listen for the service worker's rescan-alarm ping.
+    const onMessage = (message: any) => {
+      if (message?.action === 'PROSPECTLENS_RUN_DUE_RESCANS') {
+        runDueRescans().catch((err) => logWarn('RESCAN', 'Alarm-triggered re-scan failed', err));
+      }
+    };
+    if (typeof chrome !== 'undefined' && chrome.runtime?.onMessage) {
+      chrome.runtime.onMessage.addListener(onMessage);
+    }
+    return () => {
+      if (typeof chrome !== 'undefined' && chrome.runtime?.onMessage) {
+        chrome.runtime.onMessage.removeListener(onMessage);
+      }
+    };
   }, []);
 
   const loadInitialData = async () => {
@@ -431,6 +460,8 @@ export const SidePanelApp: React.FC = () => {
 
     const p = extraction.identity;
 
+    const savedPillars = computePillarScores(extraction);
+
     const newProspect: SavedProspect = {
       id: `prospect_${Date.now()}`,
       businessName: p.businessName,
@@ -447,7 +478,9 @@ export const SidePanelApp: React.FC = () => {
       auditItems: extraction.audit.items,
       opportunities: opportunitiesResult?.allOpportunities || [],
       chosenService: selectedOpportunity?.service,
-      status: 'Ready to Contact'
+      status: 'Ready to Contact',
+      pillarScores: savedPillars.map((p) => ({ id: p.id, category: p.category, score: p.score })),
+      overallScore: computeOverallScore(savedPillars)
     };
 
     await saveProspect(newProspect);
@@ -610,6 +643,26 @@ export const SidePanelApp: React.FC = () => {
           }`}
         >
           Ad Concept
+        </button>
+        <button
+          onClick={() => setActiveTab('Emails')}
+          className={`px-2 py-1 rounded-md transition cursor-pointer whitespace-nowrap ${
+            activeTab === 'Emails'
+              ? 'text-cyan-400 border-b-2 border-cyan-400 rounded-b-none'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          Emails
+        </button>
+        <button
+          onClick={() => setActiveTab('Benchmark')}
+          className={`px-2 py-1 rounded-md transition cursor-pointer whitespace-nowrap ${
+            activeTab === 'Benchmark'
+              ? 'text-cyan-400 border-b-2 border-cyan-400 rounded-b-none'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          Benchmark
         </button>
         <button
           onClick={() => setActiveTab('Prospects')}
@@ -957,7 +1010,23 @@ export const SidePanelApp: React.FC = () => {
           </div>
         )}
 
-        {/* TAB 5: PIPELINE */}
+        {/* TAB 5: EMAIL FINDER */}
+        {activeTab === 'Emails' && (
+          <EmailFinderPanel
+            extraction={extraction}
+            onUpgrade={() => {
+              setUpgradeFeatureContext('Email Finder (monthly find limit reached)');
+              setIsUpgradeModalOpen(true);
+            }}
+          />
+        )}
+
+        {/* TAB 6: BENCHMARK */}
+        {activeTab === 'Benchmark' && (
+          <BenchmarkPanel prospects={savedProspects} onRefreshProspects={refreshProspects} />
+        )}
+
+        {/* TAB 7: PIPELINE */}
         {activeTab === 'Prospects' && (
           <div className="space-y-3">
             <div>
@@ -994,10 +1063,12 @@ export const SidePanelApp: React.FC = () => {
                 setActiveTab('Overview');
               }}
             />
+
+            <SchedulesPanel prospects={savedProspects} />
           </div>
         )}
 
-        {/* TAB 6: SETTINGS */}
+        {/* TAB 8: SETTINGS */}
         {activeTab === 'Settings' && (
           <div className="space-y-3">
             <div>

@@ -28,6 +28,8 @@ In compliance with the Chrome Web Store Minimum Permissions Policy:
 | `activeTab` | Temporarily reads the public markup of the specific tab the user explicitly analyzes. |
 | `scripting` | Injects the non-invasive DOM extraction content script into the active page upon user request. |
 | `storage` | Stores your saved prospect pipeline, preferences, and custom service pricing locally in `chrome.storage.local`. |
+| `alarms` | Powers scheduled prospect re-scans (daily/weekly timers created only when you add a schedule). |
+| `notifications` | Alerts you when a scheduled re-scan detects a significant score change on a tracked prospect. |
 | `host_permissions` (`http://*/*`, `https://*/*`) | Allows analysis of standard HTTP and HTTPS local business websites requested by the user. |
 
 ---

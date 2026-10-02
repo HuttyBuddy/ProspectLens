@@ -44,7 +44,7 @@ describe('Client PDF Audit Report Engine', () => {
     expect(auditData.businessName).toBe('Austin Peak Roofing Co.');
     expect(auditData.overallScore).toBeGreaterThanOrEqual(40);
     expect(auditData.overallScore).toBeLessThanOrEqual(100);
-    expect(auditData.categoryScores.length).toBe(4);
+    expect(auditData.categoryScores.length).toBe(5);
     expect(auditData.detectedBottlenecks.length).toBeGreaterThan(0);
     expect(auditData.recommendedServices.length).toBeGreaterThan(0);
     expect(auditData.agency.name).toBe(DEFAULT_SETTINGS.companyName);

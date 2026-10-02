@@ -57,7 +57,7 @@ Local businesses are losing customer attention because they lack modern short-fo
 Generate personalized cold emails, SMS hooks, LinkedIn DMs, and cold call battle-cards based on specific weaknesses observed on the business's actual website. No generic templates—every message references real observations (e.g. missing speed-to-lead follow-up or lack of social proof).
 
 ⚡ 5. 1-Click Agency CRM & Inbound Webhook Sync
-Send verified prospect data, 4-pillar audit scores, identified bottlenecks, and customized outreach scripts directly into your CRM, inbound webhook endpoints, or automation workflows in a single click.
+Send verified prospect data, 5-pillar audit scores, identified bottlenecks, and customized outreach scripts directly into your CRM, inbound webhook endpoints, or automation workflows in a single click.
 
 📥 6. Bulk CSV / Excel Exporter for Cold Outreach Sequencers
 Export your saved leads with computed audit scores, pain point variables, and personalized subject lines formatted directly for cold outreach sequencers and sales engagement platforms. Uses UTF-8 BOM encoding so files open cleanly in spreadsheet software without corrupted characters.
@@ -119,7 +119,7 @@ All generated visual assets follow Google Chrome Web Store specifications, with 
 | **Marquee Banner** | 1400 x 560 px | [`assets/marquee-banner-1400x560.jpg`](file:///f:/ProspectLens/src/features/store-listing/assets/marquee-banner-1400x560.jpg) | Featured promotional banner on the Chrome Web Store homepage and collection headers. |
 | **Small Promo Tile** | 440 x 280 px | [`assets/promo-tile-small-440x280.jpg`](file:///f:/ProspectLens/src/features/store-listing/assets/promo-tile-small-440x280.jpg) | Extension card graphic displayed in category search results and recommendations. |
 | **Screenshot 1: Overview & Audit** | 1280 x 800 px (JPEG) | [`assets/screenshot-1-overview-1280x800.jpg`](file:///f:/ProspectLens/src/features/store-listing/assets/screenshot-1-overview-1280x800.jpg) | Turn any local business website into an opportunity with live sidepanel copilot. |
-| **Screenshot 2: PDF Deliverables** | 1280 x 800 px (JPEG) | [`assets/screenshot-2-audit-pdf-1280x800.jpg`](file:///f:/ProspectLens/src/features/store-listing/assets/screenshot-2-audit-pdf-1280x800.jpg) | 1-click professional client growth audit PDF reports with 4-pillar scorecard. |
+| **Screenshot 2: PDF Deliverables** | 1280 x 800 px (JPEG) | [`assets/screenshot-2-audit-pdf-1280x800.jpg`](file:///f:/ProspectLens/src/features/store-listing/assets/screenshot-2-audit-pdf-1280x800.jpg) | 1-click professional client growth audit PDF reports with 5-pillar scorecard. |
 | **Screenshot 3: Outreach & Video Ads** | 1280 x 800 px (JPEG) | [`assets/screenshot-3-outreach-and-ad-1280x800.jpg`](file:///f:/ProspectLens/src/features/store-listing/assets/screenshot-3-outreach-and-ad-1280x800.jpg) | Cold email pitches, SMS hooks, and AI vertical video storyboard angles. |
 | **Screenshot 4: CRM Sync & Export** | 1280 x 800 px (JPEG) | [`assets/screenshot-4-crm-sync-export-1280x800.jpg`](file:///f:/ProspectLens/src/features/store-listing/assets/screenshot-4-crm-sync-export-1280x800.jpg) | 1-click CRM webhook sync and bulk CSV export ready for outreach sequencers. |
 | **Extension Store Icon** | 128 x 128 px (PNG) | [`public/icons/icon-128.png`](file:///f:/ProspectLens/public/icons/icon-128.png) | 96x96 inner squircle icon with 16px transparent padding on all 4 sides. |

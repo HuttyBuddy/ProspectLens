@@ -4,6 +4,7 @@ import { OpportunityEngineResult } from '../opportunities/types';
 import { UserSettings } from '../settings/settingsStore';
 import { ClientAuditData, AuditCategoryScore } from './types';
 import { isRestrictedProspect } from '../extractor/exclusionPolicy';
+import { computePillarScores, computeOverallScore } from './pillarScores';
 
 /**
  * Computes structured audit data from extraction and opportunity insights.
@@ -29,37 +30,20 @@ export function buildClientAuditData(
   const meta = extraction.meta || ({} as any);
   const contacts = identity.contacts || { phones: [], emails: [], addresses: [] };
 
-  // 1. Mobile & Speed UX Score
-  const hasMeta = Boolean(meta.metaDescription && meta.metaDescription.length > 20);
-  const mobileScore = hasMeta ? 78 : 55;
+  // 1. Pillar + overall scores via the shared scoring engine (5 pillars)
+  const pillars = computePillarScores(extraction);
+  const pillarById = Object.fromEntries(pillars.map((p) => [p.id, p])) as Record<string, (typeof pillars)[number]>;
 
-  // 2. Conversion Architecture Score
-  let conversionScore = 40;
-  if (contacts.phones && contacts.phones.length > 0) conversionScore += 20;
-  if (contacts.emails && contacts.emails.length > 0) conversionScore += 15;
-  if (extraction.audit?.items?.some((i) => i.category === 'Conversions' && (i.status === 'Strong' || i.status === 'Present'))) {
-    conversionScore += 15;
-  }
-  conversionScore = Math.min(conversionScore, 85);
-
-  // 3. Social Proof & Authority Score
-  let socialScore = 45;
-  if (meta.reviewRating && meta.reviewRating >= 4.0) socialScore += 30;
-  if (meta.reviewCount && meta.reviewCount > 10) socialScore += 15;
-  if (identity.socials && Object.keys(identity.socials).length > 0) socialScore += 10;
-  socialScore = Math.min(socialScore, 95);
-
-  // 4. Video & Modern Engagement Score (typically lower for local businesses)
-  const hasVideo = meta.hasVideoEmbeds || Boolean(meta.videoEmbeds && meta.videoEmbeds.length > 0);
-  const videoScore = hasVideo ? 70 : 30;
+  const mobileScore = pillarById.mobile.score;
+  const conversionScore = pillarById.conversion.score;
+  const socialScore = pillarById.social.score;
+  const videoScore = pillarById.video.score;
+  const localScore = pillarById.local.score;
 
   // Overall Score (Weighted)
-  const overallScore = Math.round(
-    mobileScore * 0.2 +
-    conversionScore * 0.35 +
-    socialScore * 0.25 +
-    videoScore * 0.2
-  );
+  const overallScore = computeOverallScore(pillars);
+
+  const hasMeta = Boolean(meta.metaDescription && meta.metaDescription.length > 20);
 
   const categoryScores: AuditCategoryScore[] = [
     {
@@ -93,6 +77,14 @@ export function buildClientAuditData(
       summary: hasMeta
         ? 'Meta descriptions present; local geographic keywords can be further optimized.'
         : 'Meta descriptions missing or incomplete for localized search intent.'
+    },
+    {
+      category: 'Local SEO & Google Business Presence',
+      score: localScore,
+      status: localScore > 70 ? 'Good' : localScore > 50 ? 'Needs Improvement' : 'Critical',
+      summary: localScore > 70
+        ? 'Strong local footprint: schema, NAP, and review signals detected.'
+        : 'Gaps in local search presence — Maps visibility, NAP consistency, or review collection need work.'
     }
   ];
 
@@ -254,19 +246,22 @@ export function generateClientAuditPdf(auditData: ClientAuditData): void {
     scoreBoxY + 24
   );
 
-  // 3. FOUR CORE CATEGORY METRICS
+  // 3. FIVE CORE CATEGORY METRICS (2-col grid; 5th pillar spans full width)
   const catStartY = 87;
   const colWidth = (contentWidth - 6) / 2;
+  const catRowH = 16;
 
   auditData.categoryScores.forEach((cat, idx) => {
+    const isFullRow = idx === 4;
     const col = idx % 2;
     const row = Math.floor(idx / 2);
     const x = margin + col * (colWidth + 6);
-    const y = catStartY + row * 24;
+    const y = catStartY + row * catRowH;
+    const boxW = isFullRow ? contentWidth : colWidth;
 
     doc.setFillColor(255, 255, 255);
     doc.setDrawColor(226, 232, 240);
-    doc.roundedRect(x, y, colWidth, 20, 2, 2, 'FD');
+    doc.roundedRect(x, y, boxW, 13, 2, 2, 'FD');
 
     // Title and Score
     doc.setFont('helvetica', 'bold');
@@ -276,23 +271,16 @@ export function generateClientAuditPdf(auditData: ClientAuditData): void {
 
     const scoreColor = cat.score >= 70 ? [16, 185, 129] : cat.score >= 50 ? [217, 119, 6] : [239, 68, 68];
     doc.setTextColor(scoreColor[0], scoreColor[1], scoreColor[2]);
-    doc.text(`${cat.score}%`, x + colWidth - 4, y + 6, { align: 'right' });
+    doc.text(`${cat.score}%`, x + boxW - 4, y + 6, { align: 'right' });
 
     // Progress Bar Background
     doc.setFillColor(241, 245, 249);
-    doc.rect(x + 4, y + 8.5, colWidth - 8, 2, 'F');
+    doc.rect(x + 4, y + 8.5, boxW - 8, 2, 'F');
 
     // Progress Bar Fill
     doc.setFillColor(scoreColor[0], scoreColor[1], scoreColor[2]);
-    const fillWidth = ((colWidth - 8) * cat.score) / 100;
+    const fillWidth = ((boxW - 8) * cat.score) / 100;
     doc.rect(x + 4, y + 8.5, fillWidth, 2, 'F');
-
-    // Summary text
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7.5);
-    doc.setTextColor(100, 116, 139);
-    const splitSummary = doc.splitTextToSize(cat.summary, colWidth - 8);
-    doc.text(splitSummary, x + 4, y + 14);
   });
 
   // 4. DETECTED REVENUE & CONVERSION BOTTLENECKS
