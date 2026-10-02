@@ -159,7 +159,7 @@ export async function buildDiagnosticReport(
 
   return {
     generatedAt: new Date().toISOString(),
-    extensionVersion: '1.0.0',
+    extensionVersion: '2.0.0',
     userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Unknown Environment',
     license,
     settings: {
